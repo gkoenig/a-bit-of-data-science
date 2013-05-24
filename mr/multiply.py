@@ -18,32 +18,31 @@ def mapper(record):
     row = record[1]
     col = record[2]
     val = record[3]
-    #if matrix == "a":
-    #    if A.has_key(row):
-    #        columnlist = A[row]
-    #    else
-    #        columnlist = []
-    #    columnlist[col] = val
-    #    A[row] = columnlist
-    #else:
-    #    if B.has_key(row):
-    #        columnlist = B[row]
-    #    else
-    #        columnlist = []
-    #    columnlist[col] = val
-    #    B[row] = columnlist
+
     for i in range(5):
-        #print "%i,%i %s,%i,%i" % (row, i, matrix, col, val)
-        mr.emit_intermediate((row,i),(matrix,col,val))
-    print "MAPPER END: %s %i,%i" % (matrix,row,col)
-    
+        if matrix == "a":
+          mr.emit_intermediate((row,i),(matrix,col,val))
+        else:
+          mr.emit_intermediate((i,col),(matrix,row,val))
+
 def reducer(key, list_of_values):
-    print "===== REDUCER START ======="
-    print type(key), type(list_of_values)
+    A=[0]*5
+    B=[0]*5
+    sum=0
     for list_in_list in list_of_values:
-        mr.emit((list_in_list))
-    
-    
+      index = int(list_in_list[1])
+      value = int(list_in_list[2])
+      if list_in_list[0] == "a":
+        A[index]=value
+      else:
+        B[index]=value
+    for i in range(0, len(A)):
+      sum += int(A[i])*int(B[i])
+
+    tup = ( key[0], key[1], sum)
+    mr.emit(tup)
+
+
 
 # Do not modify below this line
 # =============================
