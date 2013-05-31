@@ -1,0 +1,5 @@
+quiz 1: 1622294
+quiz 2a: 2
+quiz 2b: 319
+quiz 3a (join on testfile): 2998
+quiz 3b: 28461
